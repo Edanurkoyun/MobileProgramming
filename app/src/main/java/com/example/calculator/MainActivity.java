@@ -146,7 +146,8 @@ public class MainActivity extends AppCompatActivity {
                     if (secondNumber != 0) {
                         result = firstNumber / secondNumber;
                     } else {
-                        input.setText("Hata: Bölme sıfır olamaz!");
+                        input.setText("Hata: Bölme sıfır olamaz!"); //
+
                         return;
                     }
                     break;
