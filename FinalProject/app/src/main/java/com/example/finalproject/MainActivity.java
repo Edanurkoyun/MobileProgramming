@@ -44,8 +44,7 @@ public class MainActivity extends AppCompatActivity {
            v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
            return insets;
         });
-        musicManager = MusicManager.getInstance(this);
-        musicManager.startMusic();
+
 
         history=findViewById(R.id.history);
        science=findViewById(R.id.science);
@@ -68,8 +67,8 @@ public class MainActivity extends AppCompatActivity {
        science.setOnClickListener(new View.OnClickListener() {
            @Override
            public void onClick(View v) {
-               Intent intent= new Intent(MainActivity.this,SetsActivity.class);
-               startActivity(intent);
+             //  Intent intent= new Intent(MainActivity.this,SetsActivity.class);
+             //  startActivity(intent);
                categoryname.setText("Science");
                Toast.makeText(getApplicationContext(), "Please complete the History section first.", Toast.LENGTH_SHORT).show();
                science.setEnabled(false);
@@ -80,9 +79,10 @@ public class MainActivity extends AppCompatActivity {
        mathematics.setOnClickListener(new View.OnClickListener() {
            @Override
            public void onClick(View v) {
-               Intent intent= new Intent(MainActivity.this,SetsActivity.class);
-               startActivity(intent);
+            //   Intent intent= new Intent(MainActivity.this,SetsActivity.class);
+           //    startActivity(intent);
                categoryname.setText("Mathematics");
+               Toast.makeText(getApplicationContext(), "Please complete the History section first.", Toast.LENGTH_SHORT).show();
                mathematics.setEnabled(false);
 
            }
@@ -90,9 +90,10 @@ public class MainActivity extends AppCompatActivity {
        geography.setOnClickListener(new View.OnClickListener() {
            @Override
            public void onClick(View v) {
-               Intent intent= new Intent(MainActivity.this,SetsActivity.class);
-               startActivity(intent);
+             //  Intent intent= new Intent(MainActivity.this,SetsActivity.class);
+            //   startActivity(intent);
                categoryname.setText("Geography");
+               Toast.makeText(getApplicationContext(), "Please complete the History section first.", Toast.LENGTH_SHORT).show();
                geography.setEnabled(false);
 
            }

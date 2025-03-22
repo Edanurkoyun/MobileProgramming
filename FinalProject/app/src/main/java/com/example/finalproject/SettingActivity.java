@@ -18,7 +18,8 @@ import androidx.core.view.WindowInsetsCompat;
 
 public class SettingActivity extends AppCompatActivity {
     Button btnReset,btnExit;
-    private Switch musicSwitch,soundSwitch;
+    private Switch musicSwitch;
+    private Switch soundSwitch;
     private MusicManager musicManager;
 
 
@@ -37,7 +38,9 @@ public class SettingActivity extends AppCompatActivity {
           btnReset=findViewById(R.id.btnReset);
           btnExit=findViewById(R.id.btnExit);
            musicSwitch = findViewById(R.id.musicswitch);
+           soundSwitch=findViewById(R.id.soundswitch);
         musicManager = MusicManager.getInstance(this);
+
 
         musicSwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
@@ -51,6 +54,21 @@ public class SettingActivity extends AppCompatActivity {
 
                     musicManager.startMusic();
                 }
+
+            }
+        });
+
+        soundSwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                if (isChecked) {
+
+                    musicManager.stopSound();
+                } else {
+
+                    musicManager.playSound();
+                }
+
             }
         });
 

@@ -46,6 +46,9 @@ public class QuestionActivity extends AppCompatActivity {
     private  int score= 0;
     CountDownTimer timer;
 
+    private MusicManager musicManager;
+
+
     ActivityQuestionBinding binding;
 
 
@@ -61,6 +64,7 @@ public class QuestionActivity extends AppCompatActivity {
         resetTimer();
         timer.start();
 
+
 // Veritabanına soruyu ekle
         list = dbHelper.getAllQuestions(); // Tüm soruları al
 
@@ -72,6 +76,7 @@ public class QuestionActivity extends AppCompatActivity {
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
             return insets;
         });
+
         setContentView(binding.getRoot());
         String setName=getIntent().getStringExtra("set");
         if(setName.equals("SET-1")){
@@ -151,6 +156,8 @@ public class QuestionActivity extends AppCompatActivity {
          view.animate().alpha(value).scaleX(value).scaleY(value).setDuration(500).setStartDelay(100).setInterpolator(new DecelerateInterpolator()).setListener(new Animator.AnimatorListener() {
              @Override
              public void onAnimationStart(@NonNull Animator animation) {
+                 musicManager = MusicManager.getInstance(getApplicationContext());
+                 musicManager.playSound();
 
 
                  if(value==0 && count <4){

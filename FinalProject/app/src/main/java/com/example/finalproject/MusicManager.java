@@ -1,17 +1,22 @@
 package com.example.finalproject;
 
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.media.MediaPlayer;
 
 public class MusicManager {
     private static MusicManager instance;
     private MediaPlayer mediaPlayer;
     private Context context;
+    private MediaPlayer sound;
+
 
     private MusicManager(Context context) {
         this.context = context;
         mediaPlayer = MediaPlayer.create(context, R.raw.backgroundmusic);
         mediaPlayer.setLooping(true);
+        sound=MediaPlayer.create(context,R.raw.water);
+
     }
 
     public static synchronized MusicManager getInstance(Context context) {
@@ -38,6 +43,32 @@ public class MusicManager {
             mediaPlayer.release();
             mediaPlayer = null;
         }
+        if (sound != null) {
+            sound.release();
+            sound = null;
+        }
+
     }
+
+    public void playSound() {
+        if (sound != null) {
+            sound.seekTo(0); // Ses efekti başa sarılsın
+            sound.start();
+        }
+    }
+
+    public void stopSound() {
+        if (sound != null && sound.isPlaying()) {
+            sound.stop();
+        }
+    }
+
+
+
+
+
+
+
+
 }
 
