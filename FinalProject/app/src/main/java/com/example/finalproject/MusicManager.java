@@ -3,12 +3,14 @@ package com.example.finalproject;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.media.MediaPlayer;
+import android.util.Log;
 
 public class MusicManager {
     private static MusicManager instance;
     private MediaPlayer mediaPlayer;
     private Context context;
     private MediaPlayer sound;
+    private boolean isSoundEnabled = true;
 
 
     private MusicManager(Context context) {
@@ -51,15 +53,17 @@ public class MusicManager {
     }
 
     public void playSound() {
-        if (sound != null) {
-            sound.seekTo(0); // Ses efekti başa sarılsın
+        if (sound != null && isSoundEnabled) { // Sadece ses açıksa oynat
+            sound.seekTo(0);
             sound.start();
         }
     }
 
     public void stopSound() {
         if (sound != null && sound.isPlaying()) {
-            sound.stop();
+            sound.pause();
+            Log.d("MusicManager", "Müzik durduruldu!");
+
         }
     }
 

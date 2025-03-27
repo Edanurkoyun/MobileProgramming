@@ -1,12 +1,10 @@
 package com.example.finalproject;
 
 import android.animation.Animator;
+import android.app.AlertDialog;
 import android.app.Dialog;
+import android.content.DialogInterface;
 import android.content.Intent;
-import android.database.Cursor;
-import android.database.sqlite.SQLiteDatabase;
-import android.database.sqlite.SQLiteOpenHelper;
-import android.media.MediaPlayer;
 import android.os.Bundle;
 import android.os.CountDownTimer;
 import android.view.View;
@@ -21,24 +19,19 @@ import androidx.core.view.WindowInsetsCompat;
 import com.example.finalproject.Models.QuestionModel;
 import com.example.finalproject.databinding.ActivityQuestionBinding;
 
-import java.io.File;
 import java.util.ArrayList;
 
-import android.database.Cursor;
-import android.database.sqlite.SQLiteDatabase;
-import android.os.Bundle;
 import android.view.WindowManager;
 import android.view.animation.DecelerateInterpolator;
 import android.widget.Button;
 import android.widget.TextView;
-import androidx.appcompat.app.AppCompatActivity;
 
 public class QuestionActivity extends AppCompatActivity {
     ArrayList<QuestionModel> list = new ArrayList<>();
     ArrayList<QuestionModel> setOneList = new ArrayList<>(); // SET-1 için sorular
     ArrayList<QuestionModel> setTwoList = new ArrayList<>(); // SET-2 için sorular
 
-
+    private Button btnexit;
 
 
     private  int count=0;
@@ -63,6 +56,11 @@ public class QuestionActivity extends AppCompatActivity {
         dbHelper.addQuestions();
         resetTimer();
         timer.start();
+        btnexit=findViewById(R.id.btnShare);
+
+
+
+
 
 
 // Veritabanına soruyu ekle
@@ -94,6 +92,22 @@ public class QuestionActivity extends AppCompatActivity {
                 }
             });
         }
+        binding.btnShare.setOnClickListener(v -> {
+            new AlertDialog.Builder(QuestionActivity.this)
+                    .setTitle("Exit")
+                    .setMessage("Are You Sure Exit?")
+                    .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            Intent intent = new Intent(QuestionActivity.this, MainActivity.class);
+                            startActivity(intent);
+                            finish();
+                        }
+                    })
+                    .setNegativeButton("No", null) // Hayır seçeneği sadece pencereyi kapatır
+                    .show();
+        });
+
 
         playAnimation(binding.textView10,0,list.get(position).getQuestion());
 
@@ -157,7 +171,7 @@ public class QuestionActivity extends AppCompatActivity {
              @Override
              public void onAnimationStart(@NonNull Animator animation) {
                  musicManager = MusicManager.getInstance(getApplicationContext());
-                 musicManager.playSound();
+                     musicManager.playSound();
 
 
                  if(value==0 && count <4){

@@ -54,6 +54,9 @@ public class MainActivity extends AppCompatActivity {
        btnsettings=findViewById(R.id.btnsettings);
 
 
+
+
+
        history.setOnClickListener(new View.OnClickListener() {
            @Override
            public void onClick(View v) {
@@ -75,6 +78,8 @@ public class MainActivity extends AppCompatActivity {
 
            }
        });
+
+
 
        mathematics.setOnClickListener(new View.OnClickListener() {
            @Override

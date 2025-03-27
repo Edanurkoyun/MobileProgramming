@@ -64,9 +64,13 @@ public class SettingActivity extends AppCompatActivity {
                 if (isChecked) {
 
                     musicManager.stopSound();
+                    Log.d("MusicManager", "Müzik durduruldu!");
+
                 } else {
 
                     musicManager.playSound();
+                    Log.d("MusicManager", "Müzik çalmaya başladı!");
+
                 }
 
             }
