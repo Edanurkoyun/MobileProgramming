@@ -1,0 +1,99 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/main"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".MainActivity">
+
+    <Button
+        android:id="@+id/proxbtn"
+        android:layout_width="250dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:text="Proximity Sensor"
+        app:layout_constraintEnd_toEndOf="@+id/pressbtn"
+        app:layout_constraintStart_toStartOf="@+id/pressbtn"
+        app:layout_constraintTop_toBottomOf="@+id/pressbtn" />
+
+    <Button
+        android:id="@+id/pressbtn"
+        android:layout_width="250dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:text="Pressure Sensor"
+        app:layout_constraintEnd_toEndOf="@+id/magnbtn"
+        app:layout_constraintStart_toStartOf="@+id/magnbtn"
+        app:layout_constraintTop_toBottomOf="@+id/magnbtn" />
+
+    <Button
+        android:id="@+id/humibtn"
+        android:layout_width="250dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:text="Humidity Sensor"
+        app:layout_constraintEnd_toEndOf="@+id/gyrobtn"
+        app:layout_constraintStart_toStartOf="@+id/gyrobtn"
+        app:layout_constraintTop_toBottomOf="@+id/gyrobtn" />
+
+    <Button
+        android:id="@+id/lightbtn"
+        android:layout_width="250dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:text="Light Sensor"
+        app:layout_constraintEnd_toEndOf="@+id/humibtn"
+        app:layout_constraintStart_toStartOf="@+id/humibtn"
+        app:layout_constraintTop_toBottomOf="@+id/humibtn" />
+
+    <Button
+        android:id="@+id/magnbtn"
+        android:layout_width="250dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:text="Magnometer Sensor"
+        app:layout_constraintEnd_toEndOf="@+id/lightbtn"
+        app:layout_constraintStart_toStartOf="@+id/lightbtn"
+        app:layout_constraintTop_toBottomOf="@+id/lightbtn" />
+
+    <Button
+        android:id="@+id/gyrobtn"
+        android:layout_width="250dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:text="Gyroscope Sensor"
+        app:layout_constraintEnd_toEndOf="@+id/compbtn"
+        app:layout_constraintStart_toStartOf="@+id/compbtn"
+        app:layout_constraintTop_toBottomOf="@+id/compbtn" />
+
+    <Button
+        android:id="@+id/accelbtn"
+        android:layout_width="250dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="100dp"
+        android:text="Accelerometer Sensor"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <Button
+        android:id="@+id/thermbtn"
+        android:layout_width="250dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:text="Thermometer Sensor"
+        app:layout_constraintEnd_toEndOf="@+id/proxbtn"
+        app:layout_constraintStart_toStartOf="@+id/proxbtn"
+        app:layout_constraintTop_toBottomOf="@+id/proxbtn" />
+
+    <Button
+        android:id="@+id/compbtn"
+        android:layout_width="250dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:text="Compass Sensor"
+        app:layout_constraintEnd_toEndOf="@+id/accelbtn"
+        app:layout_constraintStart_toStartOf="@+id/accelbtn"
+        app:layout_constraintTop_toBottomOf="@+id/accelbtn" />
+</androidx.constraintlayout.widget.ConstraintLayout>
