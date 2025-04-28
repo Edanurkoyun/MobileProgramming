@@ -54,7 +54,6 @@ public class MusicManager {
 
     public void playSound() {
         if (sound != null && isSoundEnabled) { // Sadece ses açıksa oynat
-            sound.seekTo(0);
             sound.start();
         }
     }
@@ -62,9 +61,12 @@ public class MusicManager {
     public void stopSound() {
         if (sound != null && sound.isPlaying()) {
             sound.pause();
-            Log.d("MusicManager", "Müzik durduruldu!");
+
 
         }
+    }
+    public void setSoundEnabled(boolean isEnabled) {
+        this.isSoundEnabled = isEnabled;
     }
 
 

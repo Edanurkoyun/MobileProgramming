@@ -24,6 +24,8 @@ import java.util.ArrayList;
 import android.view.WindowManager;
 import android.view.animation.DecelerateInterpolator;
 import android.widget.Button;
+import android.widget.CompoundButton;
+import android.widget.Switch;
 import android.widget.TextView;
 
 public class QuestionActivity extends AppCompatActivity {
@@ -32,14 +34,20 @@ public class QuestionActivity extends AppCompatActivity {
     ArrayList<QuestionModel> setTwoList = new ArrayList<>(); // SET-2 için sorular
 
     private Button btnexit;
+    private Switch soundSwitch;
+
+
+    private MusicManager musicManager;
 
 
     private  int count=0;
     private  int position=0;
     private  int score= 0;
+    private boolean isSoundPlayed = false;  // Sesin çalıp çalmadığını takip edeceğiz
+
     CountDownTimer timer;
 
-    private MusicManager musicManager;
+
 
 
     ActivityQuestionBinding binding;
@@ -50,17 +58,34 @@ public class QuestionActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         binding=ActivityQuestionBinding.inflate(getLayoutInflater());
         EdgeToEdge.enable(this);
-        setContentView(R.layout.activity_question);
+        setContentView(binding.getRoot());
 
         DBHelper dbHelper = new DBHelper(this);
         dbHelper.addQuestions();
         resetTimer();
         timer.start();
-        btnexit=findViewById(R.id.btnShare);
+        btnexit=binding.btnShare;
+        soundSwitch=binding.soundswitch; // binding ile
+        musicManager = MusicManager.getInstance(this);
 
 
 
+soundSwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+    @Override
+    public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+        musicManager.setSoundEnabled(isChecked);
+        if (isChecked) {
 
+            isSoundPlayed=true;
+            musicManager.stopSound();
+
+        } else {
+
+
+            musicManager.playSound();
+        }
+    }
+});
 
 
 // Veritabanına soruyu ekle
@@ -170,8 +195,11 @@ public class QuestionActivity extends AppCompatActivity {
          view.animate().alpha(value).scaleX(value).scaleY(value).setDuration(500).setStartDelay(100).setInterpolator(new DecelerateInterpolator()).setListener(new Animator.AnimatorListener() {
              @Override
              public void onAnimationStart(@NonNull Animator animation) {
-                 musicManager = MusicManager.getInstance(getApplicationContext());
+                 if(isSoundPlayed){
+                     musicManager = MusicManager.getInstance(getApplicationContext());
                      musicManager.playSound();
+
+                 }
 
 
                  if(value==0 && count <4){
@@ -271,5 +299,7 @@ public class QuestionActivity extends AppCompatActivity {
             setTwoList.add(list.get(i));
         }
     }
+
+
 
 }
