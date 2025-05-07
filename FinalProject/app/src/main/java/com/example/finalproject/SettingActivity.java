@@ -1,5 +1,7 @@
 package com.example.finalproject;
 
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.media.MediaPlayer;
 import android.os.Bundle;
@@ -17,7 +19,7 @@ import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
 public class SettingActivity extends AppCompatActivity {
-    Button btnReset,btnExit;
+    Button btnReset,btnExit,btnLogout;
     private Switch musicSwitch;
 
     private MusicManager musicManager;
@@ -37,6 +39,7 @@ public class SettingActivity extends AppCompatActivity {
 
           btnReset=findViewById(R.id.btnReset);
           btnExit=findViewById(R.id.btnExit);
+          btnLogout=findViewById(R.id.btnLogout);
            musicSwitch = findViewById(R.id.musicswitch);
 
         musicManager = MusicManager.getInstance(this);
@@ -69,6 +72,24 @@ public class SettingActivity extends AppCompatActivity {
                   startActivity(intent);
               }
           });
+        btnLogout.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                new AlertDialog.Builder(v.getContext())
+                        .setTitle("Finish")
+                        .setMessage("Are You Sure Logout")
+                        .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                finish(); // ScoreActivity'den çıkış yap
+                                Intent intent=new Intent(SettingActivity.this,LoginActivity.class);
+                                startActivity(intent);
+                            }
+                        })
+                        .setNegativeButton("No", null)
+                        .show();
+            }
+        });
 
 
 

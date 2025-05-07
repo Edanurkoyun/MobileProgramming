@@ -12,10 +12,11 @@ import android.util.Log;
 import com.example.finalproject.Models.QuestionModel;
 
 import java.util.ArrayList;
+import java.util.List;
 
 public class DBHelper extends SQLiteOpenHelper {
     private static final String DATABASE_NAME = "quizDB";
-    private static final int DATABASE_VERSION = 1;
+    private static final int DATABASE_VERSION = 2; // Eski değeri artır
 
     public DBHelper(Context context) {
 
@@ -36,15 +37,53 @@ public class DBHelper extends SQLiteOpenHelper {
                 "option_d TEXT, " +
                 "correct_answer TEXT)";
         db.execSQL(CREATE_TABLE);
+        // Skor tablosu ekleme
+        String CREATE_SCORES_TABLE = "CREATE TABLE IF NOT EXISTS scores (" +
+                "id INTEGER PRIMARY KEY AUTOINCREMENT, " +
+                "nickname TEXT, " +
+                "score INTEGER)";
+        db.execSQL(CREATE_SCORES_TABLE);
+
     }
+
 
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
         db.execSQL("DROP TABLE IF EXISTS questions");
-        onCreate(db);// Yeni versiyon için veritabanını yeniden oluşturuyoruz
+        db.execSQL("DROP TABLE IF EXISTS scores"); // scores tablosunu sil
+        onCreate(db); // Tabloları yeniden oluştur
+
     }
 
-    // Soru ekleme metodu
+    public void addScore(String nickname, int score) {
+        SQLiteDatabase db = this.getWritableDatabase();
+        ContentValues values = new ContentValues();
+        values.put("nickname", nickname);
+        values.put("score", score);
+        db.insert("scores", null, values);
+        db.close();
+    }
+
+    public List<String> getScores() {
+        List<String> scoreList = new ArrayList<>();
+        SQLiteDatabase db = this.getReadableDatabase();
+        Cursor cursor = db.rawQuery("SELECT nickname, score FROM scores ORDER BY score DESC", null);
+
+        if (cursor.moveToFirst()) {
+            do {
+                String nickname = cursor.getString(0);
+                int score = cursor.getInt(1);
+                scoreList.add(nickname + " - " + score);
+            } while (cursor.moveToNext());
+        }
+        cursor.close();
+        db.close();
+        return scoreList;
+    }
+
+
+
+        // Soru ekleme metodu
     public void addQuestions() {
         SQLiteDatabase db = this.getWritableDatabase();// Veritabanına yazma izni ile bağlantı açıyoruz
         db.execSQL("DELETE FROM questions");

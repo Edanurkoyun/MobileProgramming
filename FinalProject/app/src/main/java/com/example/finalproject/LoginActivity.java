@@ -38,6 +38,7 @@ public class LoginActivity extends AppCompatActivity {
                 if (!nickname.isEmpty()) {
                     SharedPreferences prefs = getSharedPreferences("UserData", MODE_PRIVATE);
                     SharedPreferences.Editor editor = prefs.edit();
+
                     editor.putString("nickname", nickname);
                     editor.apply();
                     Log.d("LoginActivity", "Saved nickname: " + nickname);
@@ -45,7 +46,12 @@ public class LoginActivity extends AppCompatActivity {
 
                     // MainActivity'ye geçiş yap
                     Intent intent = new Intent(LoginActivity.this, MainActivity.class);
+                    intent.putExtra("nickname", nickname); // Nickname’i taşı
                     startActivity(intent);
+                    String storedNickname = prefs.getString("nickname", "Unknown Player");
+                    intent.putExtra("nickname", storedNickname);
+
+                    Log.d("LoginActivity", "Sent nickname to ScoreActivity: " + nickname);
 
                 } else {
                     Toast.makeText(LoginActivity.this, "Please enter a nickname", Toast.LENGTH_SHORT).show();
