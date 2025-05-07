@@ -1,7 +1,9 @@
 package com.example.finalproject;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -34,9 +36,17 @@ public class LoginActivity extends AppCompatActivity {
             public void onClick(View v) {
                 String nickname = editNickname.getText().toString().trim();
                 if (!nickname.isEmpty()) {
+                    SharedPreferences prefs = getSharedPreferences("UserData", MODE_PRIVATE);
+                    SharedPreferences.Editor editor = prefs.edit();
+                    editor.putString("nickname", nickname);
+                    editor.apply();
+                    Log.d("LoginActivity", "Saved nickname: " + nickname);
+
+
+                    // MainActivity'ye geçiş yap
                     Intent intent = new Intent(LoginActivity.this, MainActivity.class);
-                    intent.putExtra("nickname", nickname);
                     startActivity(intent);
+
                 } else {
                     Toast.makeText(LoginActivity.this, "Please enter a nickname", Toast.LENGTH_SHORT).show();
                 }

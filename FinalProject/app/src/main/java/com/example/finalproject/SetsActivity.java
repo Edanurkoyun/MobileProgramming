@@ -64,6 +64,7 @@ public class SetsActivity extends AppCompatActivity {
         list.add(new SetModel("SET-10"));
 
 
+
         // SetAdapter'ı oluşturuyor ve RecyclerView'a bağlıyoruz
         SetAdapter adapter= new SetAdapter(this,list);
         binding.setRecy.setAdapter(adapter);
@@ -73,6 +74,7 @@ public class SetsActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 Intent intent= new Intent(SetsActivity.this,MainActivity.class);
+
                 startActivity(intent);
             }
         });

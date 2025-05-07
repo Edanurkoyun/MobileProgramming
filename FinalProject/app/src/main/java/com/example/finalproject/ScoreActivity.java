@@ -5,6 +5,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 
 import androidx.activity.EdgeToEdge;
@@ -42,10 +43,18 @@ public class ScoreActivity extends AppCompatActivity {
         binding.totalQuestions.setText(String.valueOf(totalScore));
         binding.rightAnsw.setText(String.valueOf(correctAnsw));
         binding.wrongAnsw.setText(String.valueOf(wrong));
-        SharedPreferences prefs = getSharedPreferences("QuizScores", MODE_PRIVATE);
-        SharedPreferences.Editor editor = prefs.edit();
-        editor.putInt(nickname, correctAnsw);
-        editor.apply();
+        SharedPreferences quizPrefs = getSharedPreferences("QuizScores", MODE_PRIVATE);
+        SharedPreferences.Editor editor = quizPrefs.edit();
+        if (nickname != null && !nickname.isEmpty()) {
+            editor.putInt(nickname, correctAnsw); // Kullanıcı adı ile score eşleştir
+            editor.apply();
+            Log.d("ScoreActivity", "Saved score: " + correctAnsw + " for " + nickname);
+        } else {
+            Log.e("ScoreActivity", "Nickname is null! Score not saved.");
+        }
+
+
+
         binding.btnRetry.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -65,7 +74,6 @@ public class ScoreActivity extends AppCompatActivity {
                             @Override
                             public void onClick(DialogInterface dialog, int which) {
                                 Intent intent = new Intent(ScoreActivity.this, ScoreTableActivity.class);
-                                intent.putExtra("nickname", nickname); // İstersen gönder ama gerekli değil
                                 intent.putExtra("score", correctAnsw); // Gerekli değil, çünkü ScoreTableActivity SharedPreferences'tan alıyor
                                 startActivity(intent);
                                 finish(); // ScoreActivity'den çıkış yap

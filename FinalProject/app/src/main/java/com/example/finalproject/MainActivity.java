@@ -30,6 +30,8 @@ public class MainActivity extends AppCompatActivity {
     private MusicManager musicManager;
 
 
+
+
     @SuppressLint("MissingInflatedId")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -61,8 +63,9 @@ public class MainActivity extends AppCompatActivity {
            @Override
            public void onClick(View v) {
                Intent intent= new Intent(MainActivity.this,SetsActivity.class);
-               startActivity(intent);
                categoryname.setText("History");
+
+               startActivity(intent);
 
            }
        });
