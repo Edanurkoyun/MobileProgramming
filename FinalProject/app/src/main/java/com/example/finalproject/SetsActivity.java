@@ -47,9 +47,11 @@ public class SetsActivity extends AppCompatActivity {
         backbtn=findViewById(R.id.backbtn);
 
         list = new ArrayList<>();
+        // RecyclerView için LinearLayoutManager kullanıyoruz
         LinearLayoutManager linearLayoutManager= new LinearLayoutManager(this);
         binding.setRecy.setLayoutManager(linearLayoutManager);
 
+        // SET'leri listeye ekliyoruz
         list.add(new SetModel("SET-1"));
         list.add(new SetModel("SET-2"));
         list.add(new SetModel("SET-3"));
@@ -61,9 +63,12 @@ public class SetsActivity extends AppCompatActivity {
         list.add(new SetModel("SET-9"));
         list.add(new SetModel("SET-10"));
 
+
+        // SetAdapter'ı oluşturuyor ve RecyclerView'a bağlıyoruz
         SetAdapter adapter= new SetAdapter(this,list);
         binding.setRecy.setAdapter(adapter);
 
+        // Geri butonuna tıklama işlemi
         backbtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

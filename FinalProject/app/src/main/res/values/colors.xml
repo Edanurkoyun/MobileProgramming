@@ -13,6 +13,9 @@
     <color name="background">#6a5be2</color>
     <color name="category">#e8e4fa</color>
     <color name="click">#ff8fa3</color>
+    <color name="my_primary">#5E35B1</color>
+    <color name="my_secondary">#673AB7</color>
+
 
 
 </resources>

@@ -36,6 +36,8 @@ public class QuestionActivity extends AppCompatActivity {
     private Button btnexit;
     private Switch soundSwitch;
 
+    private TextView totalquestion;
+
 
     private MusicManager musicManager;
 
@@ -50,6 +52,8 @@ public class QuestionActivity extends AppCompatActivity {
 
 
 
+
+    // Binding sınıfı, XML ile bağlantıyı sağlıyor
     ActivityQuestionBinding binding;
 
 
@@ -60,13 +64,15 @@ public class QuestionActivity extends AppCompatActivity {
         EdgeToEdge.enable(this);
         setContentView(binding.getRoot());
 
-        DBHelper dbHelper = new DBHelper(this);
-        dbHelper.addQuestions();
+        DBHelper dbHelper = new DBHelper(this); // Veritabanı yardımcı sınıfını oluşturuyoruz
+        dbHelper.addQuestions(); // Veritabanına soruları ekliyoruz
         resetTimer();
         timer.start();
         btnexit=binding.btnShare;
         soundSwitch=binding.soundswitch; // binding ile
-        musicManager = MusicManager.getInstance(this);
+        musicManager = MusicManager.getInstance(this); // Müzik yöneticisini başlatıyoruz
+        totalquestion=binding.totalQuestion;
+
 
 
 
@@ -100,7 +106,10 @@ soundSwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListene
             return insets;
         });
 
+
+// Layout'u uygulamaya set ediyoruz
         setContentView(binding.getRoot());
+        // Hangi set'in seçildiğini kontrol ediyoruz
         String setName=getIntent().getStringExtra("set");
         if(setName.equals("SET-1")){
             list = new ArrayList<>(setOneList);
@@ -115,8 +124,10 @@ soundSwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListene
                 public void onClick(View v) {
                     checkAnswer((Button) v );
                 }
+                // Kullanıcı bir seçeneği tıkladığında cevap kontrolünü yapıyoruz
             });
         }
+        // Çıkış butonuna tıklandığında kullanıcıya onay soruyoruz
         binding.btnShare.setOnClickListener(v -> {
             new AlertDialog.Builder(QuestionActivity.this)
                     .setTitle("Exit")
@@ -134,6 +145,7 @@ soundSwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListene
         });
 
 
+        // Soruları animasyonla gösteriyoruz
         playAnimation(binding.textView10,0,list.get(position).getQuestion());
 
         binding.btnNext.setOnClickListener(new View.OnClickListener() {
@@ -145,12 +157,15 @@ soundSwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListene
                 timer.start();
                 binding.btnNext.setEnabled(false);
                 binding.btnNext.setAlpha(0.83f);
-                enableOption(true);
-                position++;
+                enableOption(true);// Seçenekleri aktif hale getiriyoruz
+                position++; // Şu anki sorunun index'ini arttırıyoruz
+                totalquestion.setText(position + 1 + "/" + list.size()); // Soru sırasını güncelliyoruz
+
+                // Son soruya gelindiğinde puanı gösteren sayfaya geçiyoruz
                 if(position == list.size()){
                     Intent intent= new Intent(QuestionActivity.this,ScoreActivity.class);
-                    intent.putExtra("score",score);
-                    intent.putExtra("total",list.size());
+                    intent.putExtra("score",score); // Puanı gönderiyoruz
+                    intent.putExtra("total",list.size()); //Toplam soru sayısını gönderiyoruz
                     startActivity(intent);
                     finish();
                     return;
@@ -174,10 +189,11 @@ soundSwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListene
 
             @Override
             public void onFinish() {
+                // Timer bitince zaman dolduğuna dair bir dialog gösteriyoruz
                 Dialog dialog= new Dialog(QuestionActivity.this);
-                dialog.getWindow().addFlags(WindowManager.LayoutParams.FLAG_BLUR_BEHIND);
-                dialog.setCancelable(false);
-                dialog.setContentView(R.layout.timeout_dialog);
+                dialog.getWindow().addFlags(WindowManager.LayoutParams.FLAG_BLUR_BEHIND); // Dialog'un arkasını bulanık yapıyoruz
+                dialog.setCancelable(false); // Dialog'u kapatılabilir yapmıyoruz
+                dialog.setContentView(R.layout.timeout_dialog); // timeout dialog'un layout'unu set ediyoruz
                 dialog.findViewById(R.id.tryAgain).setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
@@ -195,6 +211,7 @@ soundSwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListene
          view.animate().alpha(value).scaleX(value).scaleY(value).setDuration(500).setStartDelay(100).setInterpolator(new DecelerateInterpolator()).setListener(new Animator.AnimatorListener() {
              @Override
              public void onAnimationStart(@NonNull Animator animation) {
+                 // Animasyon başladığında sesin çalıp çalmadığına göre müzik çalmayı başlatıyoruz
                  if(isSoundPlayed){
                      musicManager = MusicManager.getInstance(getApplicationContext());
                      musicManager.playSound();
@@ -222,6 +239,7 @@ soundSwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListene
 
              @Override
              public void onAnimationEnd(@NonNull Animator animation) {
+                 // Animasyon bitince veriyi view'e set ediyoruz
                  if (value == 0) {
                      try {
                          // view bir TextView olacağı için, bu şekilde değiştirelim
@@ -256,6 +274,7 @@ soundSwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListene
 
     }
 
+    // Seçenekleri etkinleştirip devre dışı bırakmak için metod
     private void enableOption(boolean enable) {
         for(int i=0;i<4;i++){
             binding.optionContainer.getChildAt(i).setEnabled(enable);
@@ -275,13 +294,14 @@ soundSwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListene
 
         binding.btnNext.setEnabled(true);
         binding.btnNext.setAlpha(1);
+        // Seçilen cevabın doğru olup olmadığını kontrol ediyoruz
         if(selectedOption.getText().toString().equals(list.get(position).getCorrectAnswer())){
               score++;
-              selectedOption.setBackgroundResource(R.drawable.right_answ);
+              selectedOption.setBackgroundResource(R.drawable.right_answ);// Doğru cevabı yeşil yapıyoruz
         }
         else {
             selectedOption.setBackgroundResource(R.drawable.wrong_answ);
-            Button correctOption=binding.optionContainer.findViewWithTag(list.get(position).getCorrectAnswer());
+            Button correctOption=binding.optionContainer.findViewWithTag(list.get(position).getCorrectAnswer());  // Doğru cevabı buluyoruz
             correctOption.setBackgroundResource(R.drawable.right_answ);
         }
     }
@@ -289,14 +309,14 @@ soundSwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListene
 
     public void setOne() {
         for (int i = 0; i < 5 && i < list.size(); i++) {
-            setOneList.add(list.get(i));
+            setOneList.add(list.get(i)); // İlk 5 soruyu SET-1'e ekliyoruz
         }
     }
 
     // Geriye kalan soruları SET-2'ye ekle
     public void setTwo() {
         for (int i = 5; i < list.size(); i++) {
-            setTwoList.add(list.get(i));
+            setTwoList.add(list.get(i)); // Kalan soruları SET-2 ye ekliyoruz
         }
     }
 

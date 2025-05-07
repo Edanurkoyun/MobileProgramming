@@ -3,6 +3,7 @@ package com.example.finalproject;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.View;
 
@@ -30,15 +31,21 @@ public class ScoreActivity extends AppCompatActivity {
             return insets;
         });
 
-       // getSupportActionBar().hide();
+       // getSupportActionBar().hide(); // Eğer Action Bar'ı gizlemek istersem, bu satırı açacağım
+        // Intent ile gelen verileri alıyoruz
         int totalScore=getIntent().getIntExtra("total",0);
         int correctAnsw=getIntent().getIntExtra("score",0);
+        String nickname = getIntent().getStringExtra("nickname");
 
+        // Yanlış cevap sayısını hesaplıyoruz
         int wrong=totalScore-correctAnsw;
         binding.totalQuestions.setText(String.valueOf(totalScore));
         binding.rightAnsw.setText(String.valueOf(correctAnsw));
         binding.wrongAnsw.setText(String.valueOf(wrong));
-
+        SharedPreferences prefs = getSharedPreferences("QuizScores", MODE_PRIVATE);
+        SharedPreferences.Editor editor = prefs.edit();
+        editor.putInt(nickname, correctAnsw);
+        editor.apply();
         binding.btnRetry.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -57,7 +64,11 @@ public class ScoreActivity extends AppCompatActivity {
                         .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialog, int which) {
-                                finish();
+                                Intent intent = new Intent(ScoreActivity.this, ScoreTableActivity.class);
+                                intent.putExtra("nickname", nickname); // İstersen gönder ama gerekli değil
+                                intent.putExtra("score", correctAnsw); // Gerekli değil, çünkü ScoreTableActivity SharedPreferences'tan alıyor
+                                startActivity(intent);
+                                finish(); // ScoreActivity'den çıkış yap
                             }
                         })
                         .setNegativeButton("No", null)

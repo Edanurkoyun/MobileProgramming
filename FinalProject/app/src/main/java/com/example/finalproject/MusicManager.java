@@ -6,26 +6,28 @@ import android.media.MediaPlayer;
 import android.util.Log;
 
 public class MusicManager {
-    private static MusicManager instance;
+    private static MusicManager instance; // Singleton örneği için değişken
     private MediaPlayer mediaPlayer;
     private Context context;
     private MediaPlayer sound;
     private boolean isSoundEnabled = true;
 
 
+    // Constructor, context'i alır ve müzik kaynaklarını başlatır
     private MusicManager(Context context) {
         this.context = context;
         mediaPlayer = MediaPlayer.create(context, R.raw.backgroundmusic);
-        mediaPlayer.setLooping(true);
+        mediaPlayer.setLooping(true);// Müziği tekrar çalacak şekilde ayarlıyoruz
         sound=MediaPlayer.create(context,R.raw.water);
 
     }
 
+    // Singleton desenine göre sadece bir MusicManager örneği yaratmamızı sağlıyor
     public static synchronized MusicManager getInstance(Context context) {
         if (instance == null) {
-            instance = new MusicManager(context);
+            instance = new MusicManager(context); // Eğer örnek yoksa oluşturuluyor
         }
-        return instance;
+        return instance; // Singleton örneği geri dönüyor
     }
 
     public void startMusic() {
@@ -40,6 +42,7 @@ public class MusicManager {
         }
     }
 
+    // Kaynakları serbest bırakma fonksiyonu, çalınan müziklerin ve seslerin bellekten temizlenmesini sağlar
     public void release() {
         if (mediaPlayer != null) {
             mediaPlayer.release();
@@ -65,6 +68,7 @@ public class MusicManager {
 
         }
     }
+    // Sesin açılıp kapanması için ayar fonksiyonu
     public void setSoundEnabled(boolean isEnabled) {
         this.isSoundEnabled = isEnabled;
     }

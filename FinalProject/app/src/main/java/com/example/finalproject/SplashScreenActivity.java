@@ -15,17 +15,20 @@ public class SplashScreenActivity extends AppCompatActivity {
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_splash_screen);
+        // Müzik yöneticisini başlatıyoruz
         musicManager = MusicManager.getInstance(this);
         musicManager.startMusic();
 
 
-
+        // 2 saniye sonra MainActivity'ye yönlendirme yapıyoruz
         new Handler().postDelayed(new Runnable() {
             @Override
             public void run() {
-                Intent intent= new Intent(SplashScreenActivity.this,MainActivity.class);
+                // Splash ekranı bitiminde MainActivity'ye yönlendirme
+                Intent intent= new Intent(SplashScreenActivity.this,LoginActivity.class);
                 startActivity(intent);
+                finish();// Splash ekranını bitiriyoruz
             }
-        },2000);
+        },2000);// 2 saniye bekleme süresi
     }
 }

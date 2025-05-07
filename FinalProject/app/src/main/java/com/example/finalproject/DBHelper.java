@@ -18,14 +18,17 @@ public class DBHelper extends SQLiteOpenHelper {
     private static final int DATABASE_VERSION = 1;
 
     public DBHelper(Context context) {
+
         super(context, DATABASE_NAME, null, DATABASE_VERSION);
+        // Super sınıfına veritabanı adı ve sürümü iletildi
     }
 
     @Override
     public void onCreate(SQLiteDatabase db) {
         // Tabloyu oluşturuyoruz
+        // 'questions' tablosunu oluşturmak için SQL sorgusu
         String CREATE_TABLE = "CREATE TABLE IF NOT EXISTS questions (" +
-                "id INTEGER PRIMARY KEY AUTOINCREMENT, " +
+                "id INTEGER PRIMARY KEY AUTOINCREMENT, " + // 'id' sütunu, otomatik artan birincil anahtar
                 "question TEXT, " +
                 "option_a TEXT, " +
                 "option_b TEXT, " +
@@ -38,15 +41,14 @@ public class DBHelper extends SQLiteOpenHelper {
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
         db.execSQL("DROP TABLE IF EXISTS questions");
-        onCreate(db);
+        onCreate(db);// Yeni versiyon için veritabanını yeniden oluşturuyoruz
     }
 
     // Soru ekleme metodu
     public void addQuestions() {
-        SQLiteDatabase db = this.getWritableDatabase();
+        SQLiteDatabase db = this.getWritableDatabase();// Veritabanına yazma izni ile bağlantı açıyoruz
         db.execSQL("DELETE FROM questions");
-        ContentValues values = new ContentValues();
-
+        ContentValues values = new ContentValues();// Veritabanına ekleyeceğimiz veriyi tutmak için ContentValues nesnesi oluşturuyoruz
         // Soruları veritabanına ekliyoruz
         values.put("question", "Who was the first President of the United States?");
         values.put("option_a", "Benjamin Franklin");
@@ -54,7 +56,7 @@ public class DBHelper extends SQLiteOpenHelper {
         values.put("option_c", "Thomas Jefferson");
         values.put("option_d", " John Adams");
         values.put("correct_answer", "George Washington");
-        db.insert("questions", null, values);
+        db.insert("questions", null, values);// Soruyu 'questions' tablosuna ekliyoruz
 
         values.clear();
         values.put("question", "What is the capital of France?");
@@ -146,28 +148,30 @@ public class DBHelper extends SQLiteOpenHelper {
     // Veritabanındaki soruları çekme metodu
     public ArrayList<QuestionModel> getAllQuestions() {
         ArrayList<QuestionModel> questionList = new ArrayList<>();
-        SQLiteDatabase db = this.getReadableDatabase();
+        SQLiteDatabase db = this.getReadableDatabase(); // Veritabanını sadece okuma modunda açıyoruz
+        // Veritabanından tüm soruları seçmek için rawQuery kullanıyoruz
         Cursor cursor = db.rawQuery("SELECT * FROM questions", null);
 
 
-
+        // Eğer cursor geçerli bir veriye sahipse ve ilk satıra geçebiliyorsa
         if (cursor != null && cursor.moveToFirst()) {
             do {
+                // Cursor'dan her bir sütunun verisini alıyoruz ve bir QuestionModel nesnesi oluşturuyoruz
                 @SuppressLint("Range") QuestionModel question = new QuestionModel(
-                        cursor.getString(cursor.getColumnIndex("question")),
+                        cursor.getString(cursor.getColumnIndex("question")),// 'question' sütunundan soruyu alıyoruz
                         cursor.getString(cursor.getColumnIndex("option_a")),
                         cursor.getString(cursor.getColumnIndex("option_b")),
                         cursor.getString(cursor.getColumnIndex("option_c")),
                         cursor.getString(cursor.getColumnIndex("option_d")),
                         cursor.getString(cursor.getColumnIndex("correct_answer"))
                 );
-                questionList.add(question);
-            } while (cursor.moveToNext());
+                questionList.add(question); // Oluşturduğumuz QuestionModel nesnesini listeye ekliyoruz
+            } while (cursor.moveToNext()); // Cursor bir sonraki satıra geçiyor
         }
 
-        cursor.close();
+        cursor.close(); // Cursor'ı kapatıyoruz
         db.close();
-        return questionList;
+        return questionList; // Soru listesini döndürüyoruz
 
     }
 }
