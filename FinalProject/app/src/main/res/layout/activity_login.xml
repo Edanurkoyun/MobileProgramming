@@ -68,7 +68,7 @@
                 android:id="@+id/editnickname"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:drawableEnd="@drawable/done_icon"
+                android:drawableEnd="@drawable/wrong_icon"
                 android:inputType="text" />
  <RelativeLayout
      android:layout_width="match_parent"

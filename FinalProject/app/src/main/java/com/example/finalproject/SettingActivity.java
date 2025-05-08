@@ -19,7 +19,7 @@ import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
 public class SettingActivity extends AppCompatActivity {
-    Button btnReset,btnExit,btnLogout;
+    Button btnscore,btnExit,btnLogout;
     private Switch musicSwitch;
 
     private MusicManager musicManager;
@@ -37,7 +37,7 @@ public class SettingActivity extends AppCompatActivity {
             return insets;
         });
 
-          btnReset=findViewById(R.id.btnReset);
+          btnscore=findViewById(R.id.btnscore);
           btnExit=findViewById(R.id.btnExit);
           btnLogout=findViewById(R.id.btnLogout);
            musicSwitch = findViewById(R.id.musicswitch);
@@ -58,6 +58,13 @@ public class SettingActivity extends AppCompatActivity {
                     musicManager.startMusic();
                 }
 
+            }
+        });
+        btnscore.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent =new Intent(SettingActivity.this,ScoreTableActivity.class);
+                startActivity(intent);
             }
         });
 

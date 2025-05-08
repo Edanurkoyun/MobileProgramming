@@ -1,9 +1,12 @@
 package com.example.finalproject;
 
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.View;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.ListView;
 
 import androidx.activity.EdgeToEdge;
@@ -24,6 +27,7 @@ public class ScoreTableActivity extends AppCompatActivity {
 
     ArrayAdapter<String> adapter;
     DBHelper dbHelper;
+    Button btnback;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -36,6 +40,7 @@ public class ScoreTableActivity extends AppCompatActivity {
             return insets;
         });
 
+
         leaderboardListView = findViewById(R.id.leaderboardListView);
         dbHelper = new DBHelper(this); // Veritabanını başlat
 
@@ -43,8 +48,21 @@ public class ScoreTableActivity extends AppCompatActivity {
         List<String> scores = dbHelper.getScores();
 
         // 🟢 Tüm kayıtlı kullanıcıları SharedPreferences içinden çek
-        adapter = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, scores);
+        CustomAdapter adapter = new CustomAdapter(this, scores);
         leaderboardListView.setAdapter(adapter);
+ btnback=findViewById(R.id.btnback);
+ btnback.setOnClickListener(new View.OnClickListener() {
+     @Override
+     public void onClick(View v) {
+         Intent intent=new Intent(ScoreTableActivity.this,MainActivity.class);
+         startActivity(intent);
+     }
+ });
+
+
+
+
+
 
     }
 }
