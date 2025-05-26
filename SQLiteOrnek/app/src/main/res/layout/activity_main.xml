@@ -1,0 +1,114 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/main"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".MainActivity">
+
+    <Button
+        android:id="@+id/btnguncelle"
+        android:layout_width="222dp"
+        android:layout_height="0dp"
+        android:layout_marginBottom="27dp"
+        android:text="Kayıt Güncelle"
+        app:layout_constraintBottom_toTopOf="@+id/txtbilgi"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/btnsil" />
+
+    <Button
+        android:id="@+id/btnsil"
+        android:layout_width="222dp"
+        android:layout_height="0dp"
+        android:layout_marginBottom="18dp"
+        android:text="Kayıt Sil"
+        app:layout_constraintBottom_toTopOf="@+id/btnguncelle"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/btngoster" />
+
+    <EditText
+        android:id="@+id/txtad"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="76dp"
+        android:layout_marginBottom="24dp"
+        android:ems="10"
+        android:hint="Ad"
+        android:inputType="text"
+        app:layout_constraintBottom_toTopOf="@+id/txtsoyad"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <EditText
+        android:id="@+id/txtsoyad"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="22dp"
+        android:ems="10"
+        android:hint="Soyad"
+        android:inputType="text"
+        app:layout_constraintBottom_toTopOf="@+id/txtyas"
+        app:layout_constraintStart_toStartOf="@+id/txtad"
+        app:layout_constraintTop_toBottomOf="@+id/txtad" />
+
+    <EditText
+        android:id="@+id/txtyas"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="30dp"
+        android:ems="10"
+        android:hint="Yaş"
+        android:inputType="text"
+        app:layout_constraintBottom_toTopOf="@+id/txtsehir"
+        app:layout_constraintStart_toStartOf="@+id/txtsoyad"
+        app:layout_constraintTop_toBottomOf="@+id/txtsoyad" />
+
+    <EditText
+        android:id="@+id/txtsehir"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="32dp"
+        android:ems="10"
+        android:hint="Şehir"
+        android:inputType="text"
+        app:layout_constraintBottom_toTopOf="@+id/btnekle"
+        app:layout_constraintStart_toStartOf="@+id/txtyas"
+        app:layout_constraintTop_toBottomOf="@+id/txtyas" />
+
+    <Button
+        android:id="@+id/btnekle"
+        android:layout_width="222dp"
+        android:layout_height="0dp"
+        android:layout_marginBottom="15dp"
+        android:text="Kayıt Ekle"
+        app:layout_constraintBottom_toTopOf="@+id/btngoster"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/txtsehir" />
+
+    <Button
+        android:id="@+id/btngoster"
+        android:layout_width="222dp"
+        android:layout_height="0dp"
+        android:layout_marginBottom="25dp"
+        android:text="Kayıt Göster"
+        app:layout_constraintBottom_toTopOf="@+id/btnsil"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/btnekle" />
+
+    <TextView
+        android:id="@+id/txtbilgi"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="51dp"
+        android:text="-"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/btnguncelle" />
+</androidx.constraintlayout.widget.ConstraintLayout>
