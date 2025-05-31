@@ -32,6 +32,8 @@ public class QuestionActivity extends AppCompatActivity {
     ArrayList<QuestionModel> list = new ArrayList<>();
     ArrayList<QuestionModel> setOneList = new ArrayList<>(); // SET-1 için sorular
     ArrayList<QuestionModel> setTwoList = new ArrayList<>(); // SET-2 için sorular
+    ArrayList<QuestionModel> setThreeList = new ArrayList<>(); // SET-3 için sorular
+
 
     private Button btnexit;
     private Switch soundSwitch;
@@ -64,7 +66,7 @@ public class QuestionActivity extends AppCompatActivity {
         EdgeToEdge.enable(this);
         setContentView(binding.getRoot());
 
-        DBHelper dbHelper = new DBHelper(this); // Veritabanı yardımcı sınıfını oluşturuyoruz
+        DBHelper dbHelper = new DBHelper(this);
         dbHelper.addQuestions(); // Veritabanına soruları ekliyoruz
         resetTimer();
         timer.start();
@@ -100,6 +102,7 @@ soundSwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListene
         // SET-1 ve SET-2'yi ayır
         setOne();  // İlk 2 soruyu SET-1'e ekle
         setTwo();
+        setThree();
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main), (v, insets) -> {
             Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
@@ -116,6 +119,9 @@ soundSwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListene
         }
         else if(setName.equals("SET-2")){
             list = new ArrayList<>(setTwoList);
+        }
+        else if(setName.equals("SET-3")){
+            list = new ArrayList<>(setThreeList);
         }
         for(int i=0;i<4;i++){
 
@@ -151,30 +157,29 @@ soundSwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListene
         binding.btnNext.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if(timer!=null){
+                if (timer != null) {
                     timer.cancel();
                 }
-                timer.start();
-                binding.btnNext.setEnabled(false);
-                binding.btnNext.setAlpha(0.83f);
-                enableOption(true);// Seçenekleri aktif hale getiriyoruz
-                position++; // Şu anki sorunun index'ini arttırıyoruz
-                totalquestion.setText(position + 1 + "/" + list.size()); // Soru sırasını güncelliyoruz
 
-                // Son soruya gelindiğinde puanı gösteren sayfaya geçiyoruz
-                if(position == list.size()){
-                    Intent intent= new Intent(QuestionActivity.this,ScoreActivity.class);
-                    intent.putExtra("score",score); // Puanı gönderiyoruz
-                    intent.putExtra("total",list.size()); //Toplam soru sayısını gönderiyoruz
+                if (position == list.size() - 1) {
+                    // Son sorudan sonra score ekranına geç
+                    Intent intent = new Intent(QuestionActivity.this, ScoreActivity.class);
+                    intent.putExtra("score", score); // Puanı gönderiyoruz
+                    intent.putExtra("total", list.size()); // Toplam soru sayısını gönderiyoruz
                     startActivity(intent);
                     finish();
                     return;
-
                 }
-                count=0;
-                playAnimation(binding.textView10,0,list.get(position).getQuestion());
 
+                position++; // Burada artır
+                timer.start();
+                binding.btnNext.setEnabled(false);
+                binding.btnNext.setAlpha(0.83f);
+                enableOption(true); // Seçenekleri aktif hale getiriyoruz
+                totalquestion.setText((position + 1) + "/" + list.size()); // Soru sırasını güncelliyoruz
 
+                count = 0;
+                playAnimation(binding.textView10, 0, list.get(position).getQuestion());
             }
         });
 
@@ -315,8 +320,13 @@ soundSwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListene
 
     // Geriye kalan soruları SET-2'ye ekle
     public void setTwo() {
-        for (int i = 5; i < list.size(); i++) {
+        for (int i = 5; i < 11 && i < list.size(); i++) {
             setTwoList.add(list.get(i)); // Kalan soruları SET-2 ye ekliyoruz
+        }
+    }
+    public void setThree() {
+        for (int i = 11; i < list.size(); i++) {
+            setThreeList.add(list.get(i)); // 7 soruyu SET-3'e ekliyoruz
         }
     }
 

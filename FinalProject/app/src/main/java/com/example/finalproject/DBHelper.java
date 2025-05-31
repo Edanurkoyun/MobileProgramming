@@ -26,6 +26,7 @@ public class DBHelper extends SQLiteOpenHelper {
 
     @Override
     public void onCreate(SQLiteDatabase db) {
+
         // Tabloyu oluşturuyoruz
         // 'questions' tablosunu oluşturmak için SQL sorgusu
         String CREATE_TABLE = "CREATE TABLE IF NOT EXISTS questions (" +
@@ -44,6 +45,7 @@ public class DBHelper extends SQLiteOpenHelper {
                 "score INTEGER)";
         db.execSQL(CREATE_SCORES_TABLE);
 
+
     }
 
 
@@ -57,10 +59,34 @@ public class DBHelper extends SQLiteOpenHelper {
 
     public void addScore(String nickname, int score) {
         SQLiteDatabase db = this.getWritableDatabase();
-        ContentValues values = new ContentValues();
-        values.put("nickname", nickname);
-        values.put("score", score);
-        db.insert("scores", null, values);
+
+        // Bu kullanıcı zaten var mı diye kontrol et
+        Cursor cursor = db.rawQuery("SELECT score FROM scores WHERE nickname = ?", new String[]{nickname});
+
+        if (cursor.moveToFirst()) {
+            // Kullanıcı varsa, mevcut puanı al ve yeni puanı ekle
+            int existingScore = cursor.getInt(0);
+            int newTotalScore = existingScore + score;
+
+            ContentValues values = new ContentValues();
+            values.put("score", newTotalScore);
+            db.update("scores", values, "nickname = ?", new String[]{nickname});
+        } else {
+            // Kullanıcı yoksa, doğrudan ekle
+            ContentValues values = new ContentValues();
+            values.put("nickname", nickname);
+            values.put("score", score);
+            db.insert("scores", null, values);
+        }
+
+
+        cursor.close();
+        db.close();
+    }
+    public void resetScores() { // question activityden sildim
+        SQLiteDatabase db = this.getWritableDatabase();
+        String resetQuery = "UPDATE scores SET score = 0";
+        db.execSQL(resetQuery);
         db.close();
     }
 
@@ -175,6 +201,69 @@ public class DBHelper extends SQLiteOpenHelper {
         values.put("option_c", "1989");
         values.put("option_d", "1991");
         values.put("correct_answer", "1989");
+        db.insert("questions", null, values);
+
+        values.clear();
+        values.put("question", "What is the capital city of Germany?");
+        values.put("option_a", "Munich");
+        values.put("option_b", "Berlin");
+        values.put("option_c", "Frankfurt");
+        values.put("option_d", "Hamburg");
+        values.put("correct_answer", "Berlin");
+        db.insert("questions", null, values);
+
+        values.clear();
+        values.put("question", "Who wrote the play 'Romeo and Juliet'?");
+        values.put("option_a", "Charles Dickens");
+        values.put("option_b", "William Shakespeare");
+        values.put("option_c", "Jane Austen");
+        values.put("option_d", "Leo Tolstoy");
+        values.put("correct_answer", "William Shakespeare");
+
+        values.clear();
+        values.put("question", "Which element has the chemical symbol 'O'?");
+        values.put("option_a", "Oxygen");
+        values.put("option_b", "Gold");
+        values.put("option_c", "Osmium");
+        values.put("option_d", "Hydrogen");
+        values.put("correct_answer", "Oxygen");
+        db.insert("questions", null, values);
+
+
+        values.clear();
+        values.put("question", "What is the largest continent on Earth?");
+        values.put("option_a", "Africa");
+        values.put("option_b", "Europe");
+        values.put("option_c", "Asia");
+        values.put("option_d", "North America");
+        values.put("correct_answer", "Asia");
+        db.insert("questions", null, values);
+
+        values.clear();
+        values.put("question", "Which river is the longest in the world?");
+        values.put("option_a", "Amazon River");
+        values.put("option_b", "Yangtze River");
+        values.put("option_c", "Mississippi River");
+        values.put("option_d", "Nile River");
+        values.put("correct_answer", "Nile River");
+        db.insert("questions", null, values);
+
+        values.clear();
+        values.put("question", "Who wrote 'The Little Prince'?");
+        values.put("option_a", "J.K. Rowling");
+        values.put("option_b", "George Orwell");
+        values.put("option_c", "Antoine de Saint-Exupéry");
+        values.put("option_d", "Mark Twain");
+        values.put("correct_answer", "Antoine de Saint-Exupéry");
+        db.insert("questions", null, values);
+
+        values.clear();
+        values.put("question", "Who painted the Mona Lisa?");
+        values.put("option_a", "Leonardo da Vinci");
+        values.put("option_b", "Michelangelo");
+        values.put("option_c", "Vincent van Gogh");
+        values.put("option_d", "Pablo Picasso");
+        values.put("correct_answer", "Leonardo da Vinci");
         db.insert("questions", null, values);
 
         db.close();
