@@ -36,7 +36,9 @@ public class SetsActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        binding=ActivitySetsBinding.inflate(getLayoutInflater());
+        // ViewBinding kullanılarak layout dosyasını bağlama işlemi yapılıyor
+        binding = ActivitySetsBinding.inflate(getLayoutInflater());
+        // Kodun içinden daha kolay ve daha basit erişmek için kullandım
         EdgeToEdge.enable(this);
         setContentView(binding.getRoot());
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.set_activity), (v, insets) -> {
@@ -48,6 +50,9 @@ public class SetsActivity extends AppCompatActivity {
 
         list = new ArrayList<>();
         // RecyclerView için LinearLayoutManager kullanıyoruz
+        // RecyclerView için bir layout yöneticisi belirliyoruz
+        // LinearLayoutManager, verileri dikey veya yatay olarak sıralamak için kullanılır
+        // Burada dikey bir liste görünümü oluşturmak için kullanılıyor
         LinearLayoutManager linearLayoutManager= new LinearLayoutManager(this);
         binding.setRecy.setLayoutManager(linearLayoutManager);
 
@@ -65,7 +70,7 @@ public class SetsActivity extends AppCompatActivity {
 
 
 
-        // SetAdapter'ı oluşturuyor ve RecyclerView'a bağlıyoruz
+        // SetAdapter sınıfını kullanarak verileri RecyclerView'da göstermek için adaptörü tanımlıyoruz
         SetAdapter adapter= new SetAdapter(this,list);
         binding.setRecy.setAdapter(adapter);
 

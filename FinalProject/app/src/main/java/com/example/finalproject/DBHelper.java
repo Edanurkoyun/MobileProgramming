@@ -15,122 +15,131 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class DBHelper extends SQLiteOpenHelper {
+    // Veritabanı adı sabiti
     private static final String DATABASE_NAME = "quizDB";
-    private static final int DATABASE_VERSION = 2; // Eski değeri artır
+    // Veritabanı sürümü (değişiklik yapıldığında artırılmalı)
+    private static final int DATABASE_VERSION = 2;
 
+    // DBHelper sınıfı, SQLiteOpenHelper sınıfından kalıtım alıyor
     public DBHelper(Context context) {
-
+        // Üst sınıfın (SQLiteOpenHelper) kurucusunu çağırarak veritabanı oluşturuluyor veya açılıyor
         super(context, DATABASE_NAME, null, DATABASE_VERSION);
-        // Super sınıfına veritabanı adı ve sürümü iletildi
     }
 
+    // Veritabanı ilk kez oluşturulduğunda çağrılır
     @Override
     public void onCreate(SQLiteDatabase db) {
 
-        // Tabloyu oluşturuyoruz
-        // 'questions' tablosunu oluşturmak için SQL sorgusu
+        // Sorular tablosunu oluşturmak için SQL komutu
         String CREATE_TABLE = "CREATE TABLE IF NOT EXISTS questions (" +
-                "id INTEGER PRIMARY KEY AUTOINCREMENT, " + // 'id' sütunu, otomatik artan birincil anahtar
+                "id INTEGER PRIMARY KEY AUTOINCREMENT, " + // Otomatik artan birincil anahtar
                 "question TEXT, " +
                 "option_a TEXT, " +
                 "option_b TEXT, " +
                 "option_c TEXT, " +
                 "option_d TEXT, " +
                 "correct_answer TEXT)";
-        db.execSQL(CREATE_TABLE);
-        // Skor tablosu ekleme
+        db.execSQL(CREATE_TABLE); // SQL komutunu çalıştır
+
+        // Skorları tutacak tabloyu oluştur
         String CREATE_SCORES_TABLE = "CREATE TABLE IF NOT EXISTS scores (" +
                 "id INTEGER PRIMARY KEY AUTOINCREMENT, " +
                 "nickname TEXT, " +
                 "score INTEGER)";
-        db.execSQL(CREATE_SCORES_TABLE);
-
-
+        db.execSQL(CREATE_SCORES_TABLE); // Skor tablosunu oluştur
     }
 
-
+    // Veritabanı sürümü değiştiğinde çağrılır
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
+        // Önceki tabloları sil
         db.execSQL("DROP TABLE IF EXISTS questions");
-        db.execSQL("DROP TABLE IF EXISTS scores"); // scores tablosunu sil
+        db.execSQL("DROP TABLE IF EXISTS scores"); // Skor tablosunu da sil
         onCreate(db); // Tabloları yeniden oluştur
-
     }
 
+    // Skor ekleme veya güncelleme metodu
     public void addScore(String nickname, int score) {
-        SQLiteDatabase db = this.getWritableDatabase();
+        SQLiteDatabase db = this.getWritableDatabase(); // Veritabanını yazılabilir modda aç
 
-        // Bu kullanıcı zaten var mı diye kontrol et
+        // Kullanıcının daha önce kayıtlı olup olmadığını kontrol et
         Cursor cursor = db.rawQuery("SELECT score FROM scores WHERE nickname = ?", new String[]{nickname});
 
         if (cursor.moveToFirst()) {
-            // Kullanıcı varsa, mevcut puanı al ve yeni puanı ekle
+            // Kullanıcı zaten varsa, mevcut skoru al ve yeni skoru ekle
             int existingScore = cursor.getInt(0);
             int newTotalScore = existingScore + score;
 
+            // Yeni toplam skoru veritabanına güncelle
             ContentValues values = new ContentValues();
             values.put("score", newTotalScore);
             db.update("scores", values, "nickname = ?", new String[]{nickname});
         } else {
-            // Kullanıcı yoksa, doğrudan ekle
+            // Kullanıcı daha önce eklenmemişse, yeni kayıt olarak ekle
             ContentValues values = new ContentValues();
             values.put("nickname", nickname);
             values.put("score", score);
             db.insert("scores", null, values);
         }
 
-
-        cursor.close();
-        db.close();
-    }
-    public void resetScores() { // question activityden sildim
-        SQLiteDatabase db = this.getWritableDatabase();
-        String resetQuery = "UPDATE scores SET score = 0";
-        db.execSQL(resetQuery);
-        db.close();
+        cursor.close(); // Cursor'ü kapat
+        db.close();     // Veritabanını kapat
     }
 
+    // Tüm skorları sıfırlayan metot
+    public void resetScores() {
+        SQLiteDatabase db = this.getWritableDatabase(); // Yazılabilir veritabanı aç
+        String resetQuery = "UPDATE scores SET score = 0"; // Tüm skorları sıfırla
+        db.execSQL(resetQuery); // Sorguyu çalıştır
+        db.close(); // Veritabanını kapat
+    }
+
+    // Skor listesini sıralı bir şekilde döndüren metot
     public List<String> getScores() {
-        List<String> scoreList = new ArrayList<>();
-        SQLiteDatabase db = this.getReadableDatabase();
+        List<String> scoreList = new ArrayList<>(); // Skor listesini tutacak liste
+        SQLiteDatabase db = this.getReadableDatabase(); // Okunabilir veritabanı aç
         Cursor cursor = db.rawQuery("SELECT nickname, score FROM scores ORDER BY score DESC", null);
 
         if (cursor.moveToFirst()) {
+            // Tüm kayıtları sırayla listeye ekle
             do {
                 String nickname = cursor.getString(0);
                 int score = cursor.getInt(1);
-                scoreList.add(nickname + " - " + score);
+                scoreList.add(nickname + " - " + score); // "isim - skor" formatında ekle
             } while (cursor.moveToNext());
         }
-        cursor.close();
-        db.close();
-        return scoreList;
+
+        cursor.close(); // Cursor'ü kapat
+        db.close();     // Veritabanını kapat
+        return scoreList; // Skor listesini döndür
     }
 
-
-
-        // Soru ekleme metodu
+    // Soruları veritabanına ekleyen metot
     public void addQuestions() {
-        SQLiteDatabase db = this.getWritableDatabase();// Veritabanına yazma izni ile bağlantı açıyoruz
-        db.execSQL("DELETE FROM questions");
-        ContentValues values = new ContentValues();// Veritabanına ekleyeceğimiz veriyi tutmak için ContentValues nesnesi oluşturuyoruz
-        // Soruları veritabanına ekliyoruz
+        SQLiteDatabase db = this.getWritableDatabase(); // Yazılabilir veritabanı aç
+        db.execSQL("DELETE FROM questions"); // Önceki soruları sil
+
+        ContentValues values = new ContentValues(); // Yeni veriler için ContentValues oluştur
+
+        // İlk soruyu ekle
         values.put("question", "Who was the first President of the United States?");
         values.put("option_a", "Benjamin Franklin");
         values.put("option_b", "George Washington");
         values.put("option_c", "Thomas Jefferson");
         values.put("option_d", " John Adams");
         values.put("correct_answer", "George Washington");
-        db.insert("questions", null, values);// Soruyu 'questions' tablosuna ekliyoruz
+        db.insert("questions", null, values); // Veriyi tabloya ekle
 
-        values.clear();
+        values.clear(); // Önceki verileri temizle
+
+        // İkinci soruyu ekle
         values.put("question", "What is the capital of France?");
         values.put("option_a", "Berlin");
         values.put("option_b", "Madrid");
         values.put("option_c", "Paris");
         values.put("option_d", "Rome");
         values.put("correct_answer", "Paris");
-        db.insert("questions", null, values);
+        db.insert("questions", null, values); // Veriyi tabloya ekle
 
         values.clear();
         values.put("question", "In which year did the Titanic sink?");

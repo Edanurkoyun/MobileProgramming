@@ -47,12 +47,15 @@ public class LoginActivity extends AppCompatActivity {
                     Drawable doneIcon = ContextCompat.getDrawable(LoginActivity.this, R.drawable.wrong_icon);
                     editNickname.setCompoundDrawablesWithIntrinsicBounds(null, null, doneIcon, null);
                     editNickname.setError(null); // varsa eski hatayı temizle
-
-                    // Nickname'i kaydet
+// Nickname’i SharedPreferences’a kaydet
                     SharedPreferences prefs = getSharedPreferences("UserData", MODE_PRIVATE);
+// SharedPreferences, küçük verileri (örneğin kullanıcı adı, ayarlar vb.) kalıcı olarak saklamak için kullanılır.
+// Uygulama kapansa bile bu veriler silinmez, bir dahaki açılışta tekrar erişilebilir.
+// Burada nickname bilgisi, kullanıcı uygulamaya tekrar girdiğinde hatırlanabilmesi için saklanıyor.
+
                     SharedPreferences.Editor editor = prefs.edit();
-                    editor.putString("nickname", nickname);
-                    editor.apply();
+                    editor.putString("nickname", nickname); // 'nickname' anahtarı ile kullanıcı adını kaydediyoruz
+                    editor.apply(); // Değişiklikleri kalıcı hale getiriyoruz
                     Log.d("LoginActivity", "Saved nickname: " + nickname);
 
                     // MainActivity'ye geçiş yap
@@ -65,7 +68,7 @@ public class LoginActivity extends AppCompatActivity {
                     Log.d("LoginActivity", "Sent nickname to ScoreActivity: " + nickname);
 
                 } else {
-                    // ❌ Hatalı giriş: hata ikonu ve uyarı
+                    //  Hatalı giriş: hata ikonu ve uyarı
                     Drawable errorIcon = ContextCompat.getDrawable(LoginActivity.this, R.drawable.done_icon);
                     editNickname.setCompoundDrawablesWithIntrinsicBounds(null, null, errorIcon, null);
                     editNickname.setError("Please enter a nickname");
